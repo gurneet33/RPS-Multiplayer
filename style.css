@@ -7,11 +7,12 @@
     margin: 2px 20px;
     margin-left: 50px;
 }
-.col-md-5{
-    /* margin-left: 20%; */
+.col-md-8{
+    left: 10%;
     border: 2px solid black;
     text-align: center;
     margin:10px 20px;
+    height: 400px;
    
 }
 .col-md-4{

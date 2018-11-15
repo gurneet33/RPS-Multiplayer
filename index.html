@@ -17,40 +17,33 @@
     <!-- font awesome -->
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
    <link rel="stylesheet" href="style.css">
+
+   <!-- link to firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+
 </head>
 <body>
     <div class="page-header"><img class="timage" src="./images/rock.jpg" alt="titlepic"></div>
     <!-- 2 palyers -->
     <div class="conatiner row mainrow">
-        <div class="col-md-5">
-            <div id="player1"><h1>Player1</h1>
+        <div class="col-md-8">
+            <div id="player"><h1></h1>
+                <input id="name-input" type="text">
+                <button class="btn btn-default" id="add-user" type="submit">Submit</button>
             <div class="gamesect row">
                 <button class="play1 col-md-4" id="r1"><i class="far fa-hand-rock"></i>Rock</button>
                 <button class="play1 col-md-4" id="p1">Paper</button>
                 <button class="play1 col-md-4" id="s1">Scissors</button>
             </div>
             <div class="row">
-                    <div class="col-md-12">DisplayDiv</div>
+                    <div class="displayDiv col-md-12"></div>
             </div>
             <div class="row">
                     <div class="col-md-12">ChoiceDiv</div>
             </div>
             </div>
         </div>
-        <div class="col-md-5">
-            <div id="player2"><h1>Player2</h1></div>
-            <div class="gamesect row">
-                    <div class="col-md-4">Rock</div>
-                    <div class="col-md-4">Paper</div>
-                    <div class="col-md-4">Scissors</div>
-            </div>
-            <div class="row">
-                    <div class="col-md-12">DisplayDiv</div> 
-            </div>
-            <div class="row">
-                    <div class="col-md-12">ChoiceDiv</div>
-            </div>
-        </div>
+       
     </div>
     <script type="text/javascript" src="script.js"></script>
 </body>
