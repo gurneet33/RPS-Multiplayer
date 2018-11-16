@@ -9,22 +9,18 @@
   };
   firebase.initializeApp(config);
 
-  var playerId;
+  var playerId = 0;
   var wins1 = 0;
   var loss1 = 0;
   var wins2 = 0;
   var loss2 = 0;
   var playerArray= [];
+  var initialClicks = 0;
+  var clickCounter = initialClicks;
+  var numberOfPlayers;
+  var keyId;
 
   var database = firebase.database();
-// working on the ref method
-  var ref = database.ref('/players')
-  console.log("ref is"+ref);
-
-  var playersRef = ref.child('players');
-  var playerskey = playersRef.key();
-  console.log("hopefully the players key  "+ playersRef.key());
-
 
 //   connecting users
 var connectionsRef = database.ref("/connections");
@@ -50,147 +46,73 @@ connectedRef.on("value", function(snapshot) {
 connectionsRef.on("value", function(snapshot) {
 
   // Display the viewer count in the html.
+  numberOfPlayers = snapshot.numChildren();
+  console.log("animal numbers are: "+ numberOfPlayers)
   // The number of online users is the number of children in the connections list.
-  console.log("numers of players are:"+ snapshot.numChildren());
-
-//   console.log("might be happening"+snapshot.child.key())
-
+  console.log("numers of players are: "+ snapshot.numChildren());
   $(".displayDiv").html(snapshot.numChildren());
+});
 
-//   if(snapshot.numChildren()===1){
-//     playerId = "player1";
+// database.ref('/recent-players').child('activeplayers').set('0')
+
+// $("#add-user").on("click",function(event){
+// event.preventDefault();
+// clickCounter++;
+// playerId++
+// $("#add-user").css("display", "none");
+
+// database.ref('/active-players').set({
+//     databaseCounter: clickCounter,
+//     databasePlayerId: playerId 
+// })
+
+// });
+
+// database.ref('/active-players').on('value',function(snap){
+//   var databaseObject = snap.val();
+//   console.log("trying number of players "+ databaseObject.databaseCounter )
+//   clickCounter = parseInt(databaseObject.databaseCounter)  ;
+
+//   if((databaseObject.databaseCounter ===1)||(databaseObject.databaseCounter ===2)){
+//     $(".mainrow").css("display", "block");
 //   }
-//   else if(snapshot.numChildren()===2){
-//       playerId ="player2"
-//   }
-//   else {
-//       playerId = "not a player"
-//   }
-//   console.log("player id is"+ playerId);
-});
-
-database.ref('/recent-players').child('activeplayers').set('0')
-
-$("#add-user").on("click",function(event){
-event.preventDefault();
-
-var name = $("#name-input").val();
-playerArray.push(name);
-console.log("the array "+playerArray)
+// })
 
 
-database.ref('/recent-players').push({
-    databaseName: name,
-    databaseplayerId: playerId, 
-    databaseWins1: wins1,
-    databaseLoss1: loss1
-    
-   }).then(function(){
-     console.log("saved for 1");
+// var ref = database.ref('players')
 
-     database.ref('/recent-players').child('activeplayers').set('1')
-     
-   })
-   console.log("saved for player1");
+database.ref('players').child('active-players').push({
+    name: "gurneet",
+    number: 1
+ })
+
+ 
+// console.log("just ref "+ ref);
 
 
+// playerRef.push({
+//     name: "Pahul",
+//     number: 2
+// })
+// database.ref('players').child('active-players').child('-LROUchd7V2rYvICHt17').child('name').transaction(function(currentno){
+//     return currentno+1;
+// });
+// console.log("wtf"+database.ref('players').child('active-players').child('-LROUchd7V2rYvICHt17').child('name').set('crazy'))
 
+// database.ref('players').on('child_added',function(data, prevChildKey){
+//     var newPlayer = data.val();
+//     console.log("name: "+newPlayer.name)
+// })
 
+// database.ref('players/').orderByChild("name").on('child_added',function(data){
+//     console.log(data.key)
+// })
 
-});
-
-database.ref("/recent-players").on("value", function(snapshot) {
-    var databaseObject = snapshot.val();
-    console.log("child parameter "+snapshot.child("activeplayers").val())
-    if (snapshot.child("activeplayers").val()==='0') {
-
-        // Set the local variables for highBidder equal to the stored values in firebase.
-        // playerId = snapshot.val().databaseName;
-
-        playerId = "player1"
-        console.log("its working" + playerId)
+database.ref('connections/').orderByKey().on('child_added',function(data){
+         console.log(data.key)
+keyId = data.key;
+$('.player').text(keyId);
         
-        // change the HTML to reflect the newly updated local values (most recent information from firebase)
-        // $(".displayDiv").text(databaseObject.databaseName);
-    
-        // // Print the local data to the console.
-        // console.log(databaseObject.databaseName);
-        
-      }
-    
-     
-      else {
+     })
 
-        playerId = "player2"
-    
-        // Print the local data to the console.
-        console.log("its working" + playerId)
-       
-      }
-
- console.log(playerId)
-});
-
-var userAnswer;
-var player1Answer;
-var player2Answer;
-var scorePlayer1 = 0;
-var scorePlayer2 =0;
-
-//  to generate player answers
-function genPlayerAnswer(){
-    if(playerId==="player1"){
-         player1Answer = userAnswer;
-    }
-    else if(playerId ==="player2"){
-        player2Answer = userAnswer;
-    }
-    else {
-        $(".displayDiv").text("wait for your turn") 
-    }
-}
-
-//  to check logic for winning
-function decideGame(player1Answer,player2Answer){
-   if(!(player1Answer&&player2Answer)===0){
-    if((player2Answer==="r"&&player1Answer==="p")||(player2Answer==="p"&&player1Answer==="s")||(player2Answer==="s"&&player1Answer==="r")) {
-        alert("player1 wins")
-        scorePlayer1++;
-    }
-
-    else if ((player1Answer==="r"&&player2Answer==="p")||(player1Answer==="p"&&player2Answer==="s")||(player1Answer==="s"&&player2Answer==="r")) {
-        alert("player2 wins")
-        scorePlayer2++
-    }
-    else {
-        player1Answer===player2Answer;
-        alert("Its a tie");
-        
-    }
-}
-else {
-    console.log("2 makes a team")
-}
-}
-
-// setting values for rps and then gerating them on clicking
-
-$("#r1").attr("data-value","r");
-$("#p1").attr("data-value","p");
-$("#s1").attr("data-value","s")
-
-$(".gamesect >button").on("click", function(){
-console.log("working");
-userAnswer = $(this).attr("data-value");
-
-genPlayerAnswer();
-console.log(player1Answer);
-console.log(player2Answer);
-decideGame(player1Answer,player2Answer);
-// if(player1Answer==="r"){
-// $(".displayDiv").addClass("far fa-hand-rock")
-// }
-// else if(player1Answer==="p"){
-//     $(".displayDiv").addClass("far fa-hand-paper")  
-// }
-});
+   
